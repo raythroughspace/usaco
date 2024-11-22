@@ -3,6 +3,10 @@
         "bitset": "cpp",
         "chrono": "cpp",
         "algorithm": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "ranges": "cpp",
+        "valarray": "cpp"
     }
 }
