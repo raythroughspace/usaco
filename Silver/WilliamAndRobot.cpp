@@ -3,25 +3,20 @@ using namespace std;
 
 int main(){
     size_t N; cin >> N;
-    vector<ssize_t> a(N);
-    multiset<ssize_t> W;
+    vector<size_t> A(N);
+    size_t totalSum = 0;
     for (size_t i=0; i<N; ++i){
-        cin >> a[i];
+        cin >> A[i];
+        totalSum += A[i];
     }
-    W.insert(max(a[0], a[1]));
-    for (size_t i=2; i<N; i+=2){
-        if (*W.begin() < min(a[i],a[i+1])){
-            W.erase(W.begin());
-            W.insert(a[i]);
-            W.insert(a[i+1]);
-        }
-        else{
-            W.insert(max(a[i], a[i+1]));
-        } 
+    priority_queue<size_t, vector<size_t>, greater<size_t>> pq;
+    size_t robotSum = 0;
+    for (size_t i=0; i<N; i+=2){
+        pq.push(A[i]);
+        pq.push(A[i+1]);
+        robotSum += pq.top();
+        pq.pop();
     }
-    ssize_t ans = 0;
-    for (ssize_t w: W){
-        ans += w;
-    }
-    cout << ans;
+    cout << totalSum - robotSum;
+
 }
