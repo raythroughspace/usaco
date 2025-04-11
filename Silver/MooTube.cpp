@@ -1,20 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std;
-void dfs(size_t i, const vector<vector<pair<size_t,size_t>>>& adj, vector<bool>& visited,
-vector<vector<size_t>>& dist, size_t start, multiset<size_t>& minEl){
-    if (visited[i]){
+
+void dfs(size_t i, const vector<vector<pair<size_t,size_t>>>& adj, vector<bool>& visited, size_t k){
+    if (visited[i])
         return;
-    }
     visited[i] = true;
-    if (start != i){
-        dist[start][i] = *minEl.begin();
-    }
-    for (auto p: adj[i]){
-        minEl.insert(p.second);
-        dfs(p.first, adj, visited, dist, start, minEl);
-        minEl.erase(minEl.lower_bound(p.second));
+    for (const auto& [v,r]: adj[i]){
+        if (r >= k){
+            dfs(v, adj, visited, k);
+        }
     }
 }
+
 int main(){
     freopen("mootube.in", "r", stdin);
     freopen("mootube.out", "w", stdout);
@@ -25,23 +22,14 @@ int main(){
         adj[p].push_back({q,r});
         adj[q].push_back({p,r});
     }
-    vector<vector<size_t>> dist(N+1, vector<size_t>(N+1));
-    for (size_t i=1; i<=N; ++i){
-        vector<bool> visited(N+1);
-        multiset<size_t> minEl;
-        dfs(i, adj, visited, dist, i, minEl);
-    }
-
     for (size_t q=0; q<Q; ++q){
-        size_t k, v; cin >> k >> v;
+        size_t k,v; cin >> k >> v;
+        vector<bool> visited(N+1);
+        dfs(v, adj, visited, k);
         size_t ans = 0;
         for (size_t i=1; i<=N; ++i){
-            if (i== v){
-                continue;
-            }
-            if (dist[v][i] >= k){
+            if (visited[i] && i != v)
                 ++ans;
-            }
         }
         cout << ans << "\n";
     }
